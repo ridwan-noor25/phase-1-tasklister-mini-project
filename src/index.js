@@ -1,19 +1,39 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form");
-  const input = document.querySelector("input");
-  const list = document.querySelector("#tasks");
+  const form = document.getElementById("create-task-form");
+  const taskList = document.getElementById("tasks");
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault(); // Prevents page reload
+  form.addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent default form submission
 
-    const taskText = input.value.trim(); // Get input value
+    const taskInput = document.getElementById("new-task-description");
+    const priorityInput = document.getElementById("priority");
 
-    if (taskText) {
-      const li = document.createElement("li");
-      li.textContent = taskText;
-      list.appendChild(li); // Append to the list
+    const task = taskInput.value.trim();
+    const priority = priorityInput.value;
+
+    if (task === "") return; // Don't add empty tasks
+
+    const li = document.createElement("li");
+    li.textContent = task + " ";
+
+    // Color based on priority
+    if (priority === "high") {
+      li.style.color = "red";
+    } else if (priority === "medium") {
+      li.style.color = "orange";
+    } else {
+      li.style.color = "green";
     }
 
-    input.value = ""; // Clear input field
+    // Delete button
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "❌";
+    deleteBtn.style.marginLeft = "10px";
+    deleteBtn.addEventListener("click", () => li.remove());
+
+    li.appendChild(deleteBtn);
+    taskList.appendChild(li);
+
+    form.reset(); // Clear input and dropdown
   });
 });
